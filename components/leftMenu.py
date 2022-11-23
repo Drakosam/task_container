@@ -20,6 +20,7 @@ class LeftMenu(QWidget):
         self.scroll_view = CustomScrollArea(self)
 
         self.notes_button = None
+        self.todo_button = None
 
         self.set_view()
 
@@ -34,16 +35,29 @@ class LeftMenu(QWidget):
         self.notes_button.pick_signal.connect(self.note_signal)
         self.set_note_buttons()
 
+        self.todo_button = ContainerButton('TODO')
+        self.todo_button.pick_signal.connect(self.todo_signal)
+        self.set_todo_buttons()
+
         self.scroll_view.add_widget(self.notes_button)
+        self.scroll_view.add_widget(self.todo_button)
         self.scroll_view.add_widget(button_settings)
+
+    def set_todo_buttons(self):
+        self.todo_button.add_child('List')
+        self.todo_button.add_child('Add new')
+        self.todo_button.add_child('Done')
 
     def set_note_buttons(self):
         for name in organizer.get_notes_categories():
             self.notes_button.add_child(name)
         self.notes_button.add_child('Add new note Category')
 
+    def todo_signal(self, event_name, action_name):
+        if event_name == SignalNames.GLOBAL_UPDATE.value:
+            self.selected_signal.emit('todo', action_name)
+
     def note_signal(self, event_name, action_name):
-        print(event_name, action_name)
         if event_name == SignalNames.LOCAL_UPDATE.value:
             self.selected = action_name
         elif event_name == SignalNames.GLOBAL_UPDATE.value:

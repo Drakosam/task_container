@@ -10,10 +10,13 @@ class NoteView(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self.notes_category = NoteViewCategory(self)
         self.notes_category.action_signal.connect(self.deal_with_action)
+
         self.notes_content = NoteViewContent(self)
         self.notes_content.action_signal.connect(self.deal_with_action)
+
         self.set_mode('Add new note Category')
 
     def set_mode(self, mode):
