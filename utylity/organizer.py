@@ -1,11 +1,13 @@
 from typing import List
 
 from utylity.noteItem import NoteContainer, Note
+from utylity.todoItem import ToDoItem
 
 
 class Organizer:
     def __init__(self):
         self.notes: List[NoteContainer] = []
+        self.todos: List[ToDoItem] = []
 
     def add_notes_new_category(self, category_name: str):
         if category_name in self.get_notes_categories():
@@ -83,3 +85,44 @@ class Organizer:
         if len(notes_ids) == 0:
             return 1
         return max(notes_ids) + 1
+
+    def update_todo(self, name, content, todo_id=0, active=True):
+        print(f'update_todo: {name}, {content}, {todo_id}, {active}')
+        if todo_id == 0:
+            todo_id = self.find_next_todo_id()
+            self.todos.append(ToDoItem(name, content, todo_id, active))
+            return True, todo_id
+        else:
+            for todo in self.todos:
+                if todo.item_id == todo_id:
+                    todo.name = name
+                    todo.description = content
+                    todo.active = active
+                    return True, todo_id
+            self.todos.append(ToDoItem(name, content, todo_id, active))
+            return True, todo_id
+
+    def find_next_todo_id(self):
+        if len(self.todos) == 0:
+            return 1
+        return max([x.item_id for x in self.todos]) + 1
+
+    def add_todo_from_json(self, todo: dict):
+        print(f'add_todo_from_json: {todo}')
+        self.update_todo(
+            todo['name'],
+            todo['description'],
+            todo['id'],
+            todo['active']
+        )
+        print(f'add_todo_from_json: {self.todos}')
+
+    def get_to_do_with_id(self, todo_id):
+        for todo in self.todos:
+            if todo.item_id == todo_id:
+                return True, todo
+        return False, ToDoItem()
+
+    def delete_todo_with_id(self, todo_id):
+        self.todos = [x for x in self.todos if x.item_id != todo_id]
+

@@ -11,7 +11,11 @@ class ToDoView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.todo_new = ToDoViewNew(self)
+        self.todo_new.action_signal.connect(self.deal_with_action)
+
         self.todo_list = ToDoViewList(self)
+        self.todo_list.action_signal.connect(self.deal_with_action)
+
         self.todo_list.hide()
 
     def set_mode(self, mode):
@@ -21,6 +25,7 @@ class ToDoView(QWidget):
         else:
             self.todo_new.hide()
             self.todo_list.show()
+            self.todo_list.set_mode(mode)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

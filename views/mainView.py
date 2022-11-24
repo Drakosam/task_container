@@ -25,6 +25,7 @@ class MainView(QWidget):
         self.to_do_view.hide()
 
         self.noteView.action_signal.connect(self.deal_with_action)
+        self.to_do_view.action_signal.connect(self.deal_with_action)
 
     def resizeEvent(self, event):
         self.leftMenu.resize(250, self.height())
@@ -66,5 +67,7 @@ class MainView(QWidget):
     def deal_with_action(self, action, name):
         if action == 'notes':
             self.note_action(name)
+            fM.save_to_file()
+        if action == 'todo':
             fM.save_to_file()
 
