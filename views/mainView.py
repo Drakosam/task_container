@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget
 
 from components.leftMenu import LeftMenu
 from utylity.signalNames import SignalNames
+from views.autoMoveView import AutoMoveView
 from views.noteView import NoteView
 from views.settingsView import SettingsView
 
@@ -16,27 +17,32 @@ class MainView(QWidget):
         self.resize(800, 600)
         self.leftMenu = LeftMenu(self)
         self.leftMenu.selected_signal.connect(self.selected_content)
+        self.view_components = []
 
         self.noteView = NoteView(self)
         self.settingsView = SettingsView(self)
         self.to_do_view = ToDoView(self)
+        self.auto_move = AutoMoveView(self)
 
-        self.settingsView.hide()
-        self.to_do_view.hide()
+        self.view_components.append(self.noteView)
+        self.view_components.append(self.settingsView)
+        self.view_components.append(self.to_do_view)
+        self.view_components.append(self.auto_move)
 
-        self.noteView.action_signal.connect(self.deal_with_action)
-        self.to_do_view.action_signal.connect(self.deal_with_action)
+        self.hide_all()
+        self.noteView.show()
+        self.setup_views()
+
+    def setup_views(self):
+        for view_item in self.view_components:
+            view_item.move(250, 0)
+            view_item.action_signal.connect(self.deal_with_action)
 
     def resizeEvent(self, event):
         self.leftMenu.resize(250, self.height())
 
-        self.noteView.resize(self.width() - 250, self.height())
-        self.settingsView.resize(self.width() - 250, self.height())
-        self.to_do_view.resize(self.width() - 250, self.height())
-
-        self.noteView.move(250, 0)
-        self.settingsView.move(250, 0)
-        self.to_do_view.move(250, 0)
+        for view_item in self.view_components:
+            view_item.resize(self.width() - 250, self.height())
 
     def selected_content(self, content, name):
         if content == 'note':
@@ -49,6 +55,10 @@ class MainView(QWidget):
             self.to_do_view.show()
             self.to_do_view.set_mode(name)
 
+        elif content == 'auto_move':
+            self.hide_all()
+            self.auto_move.show()
+
         elif content == 'settings':
             self.hide_all()
             self.settingsView.show()
@@ -57,6 +67,7 @@ class MainView(QWidget):
         self.to_do_view.hide()
         self.noteView.hide()
         self.settingsView.hide()
+        self.auto_move.hide()
 
     def note_action(self, name: SignalNames):
         if name == SignalNames.NEW_CATEGORY.value:
@@ -68,6 +79,7 @@ class MainView(QWidget):
         if action == 'notes':
             self.note_action(name)
             fM.save_to_file()
-        if action == 'todo':
+        elif action == 'todo':
             fM.save_to_file()
-
+        elif action == 'auto_move':
+            fM.save_to_file()

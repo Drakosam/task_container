@@ -1,4 +1,5 @@
 from PySide6.QtCore import Signal
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QWidget, QPushButton
 
 from utylity.signalNames import SignalNames
@@ -12,6 +13,10 @@ class ContainerButton(QWidget):
         self.children_items = []
         self.expand = False
         self.main_button = QPushButton(container_name, self)
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(12)
+        self.main_button.setFont(font)
         self.main_button.pressed.connect(self.on_press)
         self.setFixedHeight(40)
 

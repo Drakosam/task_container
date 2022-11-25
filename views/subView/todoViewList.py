@@ -7,8 +7,10 @@ from components.customScrollArea import CustomScrollArea
 from utylity import organizer
 from utylity.signalNames import SignalNames
 
+
 class ToDoViewList(QWidget):
     action_signal = QtCore.Signal(str, str)
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.todo_name = QLineEdit(self)
@@ -64,7 +66,7 @@ class ToDoViewList(QWidget):
         if self.selected_id != 0:
             print('update')
             organizer.update_todo(self.todo_name.text(), self.todo_content.toPlainText(), self.selected_id,
-                                       self.mode)
+                                  self.mode)
             self.action_signal.emit('todo', SignalNames.ITEM_UPDATE)
 
     def delete_item(self):

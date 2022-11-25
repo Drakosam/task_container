@@ -1,8 +1,8 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget
 
-from views.noteViewContent import NoteViewContent
-from views.noteViewCategory import NoteViewCategory
+from views.subView.noteViewContent import NoteViewContent
+from views.subView.noteViewCategory import NoteViewCategory
 
 
 class NoteView(QWidget):

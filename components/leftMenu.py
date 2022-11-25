@@ -1,4 +1,5 @@
 from PySide6 import QtCore
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QWidget, QPushButton
 
 from components.containerButtons import ContainerButton
@@ -29,6 +30,10 @@ class LeftMenu(QWidget):
     def set_view(self):
         button_settings = QPushButton('Settings')
         button_settings.setFixedHeight(40)
+        font_settings = QFont()
+        font_settings.setBold(True)
+        font_settings.setPointSize(12)
+        button_settings.setFont(font_settings)
         button_settings.pressed.connect(self.settings_signal)
 
         self.notes_button = ContainerButton('Notes')
@@ -39,8 +44,17 @@ class LeftMenu(QWidget):
         self.todo_button.pick_signal.connect(self.todo_signal)
         self.set_todo_buttons()
 
+        auto_move = QPushButton('Auto Move')
+        auto_move.setFixedHeight(40)
+        font_settings = QFont()
+        font_settings.setBold(True)
+        font_settings.setPointSize(12)
+        auto_move.setFont(font_settings)
+        auto_move.pressed.connect(self.auto_move_signal)
+
         self.scroll_view.add_widget(self.notes_button)
         self.scroll_view.add_widget(self.todo_button)
+        self.scroll_view.add_widget(auto_move)
         self.scroll_view.add_widget(button_settings)
 
     def set_todo_buttons(self):
@@ -62,6 +76,9 @@ class LeftMenu(QWidget):
             self.selected = action_name
         elif event_name == SignalNames.GLOBAL_UPDATE.value:
             self.selected_signal.emit('note', action_name)
+
+    def auto_move_signal(self):
+        self.selected_signal.emit('auto_move', SignalNames.PLACEHOLDER)
 
     def settings_signal(self):
         self.selected_signal.emit('settings', SignalNames.PLACEHOLDER)

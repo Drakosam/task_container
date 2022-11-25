@@ -1,8 +1,8 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget
 
-from views.todoViewList import ToDoViewList
-from views.todoViewNew import ToDoViewNew
+from views.subView.todoViewList import ToDoViewList
+from views.subView.todoViewNew import ToDoViewNew
 
 
 class ToDoView(QWidget):
