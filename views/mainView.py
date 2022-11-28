@@ -55,9 +55,10 @@ class MainView(QWidget):
             self.to_do_view.show()
             self.to_do_view.set_mode(name)
 
-        elif content == 'auto_move':
+        elif content == 'auto_move_items':
             self.hide_all()
             self.auto_move.show()
+            self.auto_move.update_view()
 
         elif content == 'settings':
             self.hide_all()
@@ -81,5 +82,5 @@ class MainView(QWidget):
             fM.save_to_file()
         elif action == 'todo':
             fM.save_to_file()
-        elif action == 'auto_move':
+        elif action == 'auto_move_items':
             fM.save_to_file()

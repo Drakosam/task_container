@@ -78,7 +78,7 @@ class LeftMenu(QWidget):
             self.selected_signal.emit('note', action_name)
 
     def auto_move_signal(self):
-        self.selected_signal.emit('auto_move', SignalNames.PLACEHOLDER)
+        self.selected_signal.emit('auto_move_items', SignalNames.PLACEHOLDER)
 
     def settings_signal(self):
         self.selected_signal.emit('settings', SignalNames.PLACEHOLDER)

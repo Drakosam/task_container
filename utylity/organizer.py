@@ -1,5 +1,6 @@
 from typing import List
 
+from utylity.autoMoveItem import AutoMoveItem
 from utylity.noteItem import NoteContainer, Note
 from utylity.todoItem import ToDoItem
 
@@ -8,6 +9,7 @@ class Organizer:
     def __init__(self):
         self.notes: List[NoteContainer] = []
         self.todos: List[ToDoItem] = []
+        self.auto_move: List[AutoMoveItem] = []
 
     def add_notes_new_category(self, category_name: str):
         if category_name in self.get_notes_categories():
@@ -126,3 +128,38 @@ class Organizer:
     def delete_todo_with_id(self, todo_id):
         self.todos = [x for x in self.todos if x.item_id != todo_id]
 
+    def update_auto_move_item(self, task_id=0, name='', source='', target='', extension='', cooldown=1, status=False):
+        print(task_id, name, source, target, extension, cooldown, status)
+
+        if task_id == 0:
+            task_id = self.find_next_auto_move_id()
+        else:
+            self.remove_auto_move_item(task_id)
+
+        self.auto_move.append(AutoMoveItem(task_id, name, source, target, extension, cooldown, status))
+        return task_id
+
+    def remove_auto_move_item(self, task_id):
+        self.auto_move = [x for x in self.auto_move if x.task_id != task_id]
+
+    def find_next_auto_move_id(self):
+        if len(self.auto_move) == 0:
+            return 1
+        return max([x.task_id for x in self.auto_move]) + 1
+
+    def add_auto_move_from_jason(self, item):
+        self.update_auto_move_item(
+            item['task_id'],
+            item['name'],
+            item['source_path'],
+            item['target_path'],
+            item['extension'],
+            item['cooldown'],
+            item['status']
+        )
+
+    def get_auto_move_item(self, task_id):
+        for item in self.auto_move:
+            if item.task_id == task_id:
+                return True, item
+        return False, AutoMoveItem()

@@ -7,9 +7,9 @@ from utylity import organizer
 def save_to_file():
     notes = ','.join([str(x) for x in organizer.notes])
     todos = ','.join([str(x) for x in organizer.todos])
+    auto_items = ','.join([str(x) for x in organizer.auto_move])
 
-    data = '{"notes":[' + notes + '],"todos":[' + todos + ']}'
-
+    data = '{"notes":[' + notes + '],"todos":[' + todos + '], "auto_items":[' + auto_items + ']}'
     print(data)
 
     with open('data.json', 'w') as file:
@@ -30,3 +30,7 @@ def load_from_file():
         if 'todos' in data:
             for todo in data['todos']:
                 organizer.add_todo_from_json(todo)
+
+        if 'auto_items' in data:
+            for auto_item in data['auto_items']:
+                organizer.add_auto_move_from_jason(auto_item)
