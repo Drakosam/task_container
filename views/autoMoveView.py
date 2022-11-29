@@ -76,10 +76,7 @@ class AutoMoveView(QWidget):
         self.active_task = CustomScrollArea(self)
         self.dormant_task = CustomScrollArea(self)
 
-
     def update_item(self):
-        print('update auto move')
-        print()
         organizer.update_auto_move_item(
             task_id=self.task_id,
             name=self.task_name.text(),
@@ -100,6 +97,8 @@ class AutoMoveView(QWidget):
             self.check_box.setChecked(False)
 
         self.action_signal.emit('auto_move_items', SignalNames.ITEM_UPDATE.value)
+
+        self.update_view()
 
     def set_source(self):
         path = QFileDialog.getExistingDirectory(self, 'Select Source Folder')
@@ -151,11 +150,16 @@ class AutoMoveView(QWidget):
             success, item = organizer.get_auto_move_item(item_id)
             if success:
                 self.set_item(item)
+                self.action_signal.emit('auto_move_items', SignalNames.ITEM_UPDATE.value)
+
         if signal_name == 'mark':
             success, item = organizer.get_auto_move_item(item_id)
             if success:
                 item.status = not item.status
             self.set_item(item)
+            self.action_signal.emit('auto_move_items', SignalNames.ITEM_UPDATE.value)
+
         if signal_name == 'delete':
             organizer.remove_auto_move_item(item_id)
+            self.action_signal.emit('auto_move_items', SignalNames.ITEM_DELETE.value)
         self.update_view()

@@ -1,6 +1,10 @@
+from threading import Thread
+from time import sleep
+
 from PySide6.QtWidgets import QWidget
 
 from components.leftMenu import LeftMenu
+from utylity import organizer
 from utylity.signalNames import SignalNames
 from views.autoMoveView import AutoMoveView
 from views.noteView import NoteView
@@ -32,6 +36,17 @@ class MainView(QWidget):
         self.hide_all()
         self.noteView.show()
         self.setup_views()
+
+        self.secondThread = Thread(target=self.background_thread_auto_move, args=())
+        self.secondThread.start()
+
+    @staticmethod
+    def background_thread_auto_move():
+        while True:
+            for item in organizer.auto_move:
+                if item.is_next_run_time():
+                    item.execute()
+            sleep(60)
 
     def setup_views(self):
         for view_item in self.view_components:
@@ -84,3 +99,6 @@ class MainView(QWidget):
             fM.save_to_file()
         elif action == 'auto_move_items':
             fM.save_to_file()
+
+    def closeEvent(self, event) -> None:
+        print('close app')

@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QWidget, QPushButton
 
 
 class TaskItemView(QWidget):
-    action_signal = QtCore.Signal(str, str)
+    action_signal = QtCore.Signal(str, int)
 
     def __init__(self, parent=None):
         super().__init__(parent)
