@@ -1,3 +1,5 @@
+from functools import partial
+
 from PySide6 import QtCore
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout
@@ -51,10 +53,10 @@ class NoteViewCategory(QWidget):
 
     def refresh_category_list(self):
         self.scroll_area.clear()
-        for name in organizer.get_notes_categories():
+        for name in organizer.category_list:
             button = QPushButton(f'remove :: {name}', self)
             button.setMinimumHeight(40)
-            button.pressed.connect(lambda name=name: self.remove_action(name))
+            button.pressed.connect(partial(self.remove_action, name))
             self.scroll_area.add_widget(button)
 
     def remove_action(self, name):

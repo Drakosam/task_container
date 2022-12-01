@@ -64,7 +64,8 @@ class NoteViewContent(QWidget):
         new_task_name = self.note_name.text()
         task_content = self.note_content.toPlainText()
 
-        status, note_id = organizer.update_note_content(self.category_name, new_task_name, task_content, self.current_note_id)
+        status, note_id = organizer.update_note_content(self.category_name, new_task_name, task_content,
+                                                        self.current_note_id)
 
         print('update_action', status)
         if status:
@@ -83,7 +84,7 @@ class NoteViewContent(QWidget):
         self.refresh_task_list()
 
     def delete_action(self):
-        status = organizer.delete_note_content(self.category_name, self.current_note_id)
+        status = organizer.delete_note_content(self.current_note_id)
 
         self.clear_action()
         if status:
@@ -109,7 +110,7 @@ class NoteViewContent(QWidget):
         self.refresh_task_list()
 
     def set_note_content(self, note_id):
-        note = organizer.get_note(self.category_name, note_id)
+        note = organizer.get_note(note_id)
         self.current_note_id = note.note_id
         self.note_name.setText(note.name)
         self.note_content.setText(note.content)

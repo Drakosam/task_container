@@ -26,6 +26,7 @@ def load_from_file():
         if 'notes' in data:
             for note in data['notes']:
                 organizer.add_note_from_json(note)
+            organizer.category_list = organizer.get_notes_categories()
 
         if 'todos' in data:
             for todo in data['todos']:
